@@ -1,4 +1,5 @@
-const service = require('./index')
+const service = require('./index');
+const { isNull } = require('lodash');
 
 /**
  * Express middleware to get the list of pull requests for a GitHub repository
@@ -17,8 +18,8 @@ middleware = () => {
     const { query = {} } = req
     const { url } = query
     try {
-      const pullRequests = await service.getGitHubPullRequestList(url);
-      if (!pullRequests) {
+      const pullRequests = await service.getGitHubPullRequestData(url);
+      if (isNull(pullRequests)) {
         res.status(404);
         res.json({ Error: { msg: 'Unable to retrieve pull requests' } });
       } else {
@@ -26,7 +27,7 @@ middleware = () => {
         res.send(pullRequests);
       }
     } catch (e) {
-      next(e)
+      next(e);
     }
   }
 }
