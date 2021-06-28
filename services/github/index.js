@@ -17,7 +17,7 @@ const GITHUB_REPO_API_URL = 'https://api.github.com/repos';
  * Retrieve list of pull requests for a given repository
  *
  * @param {String} repoUrl The URL to the repository
- * @returns {Object} Returns a JSON object representing the PRs for a given repo
+ * @returns {Object} Returns an object representing the PRs with commit count for a given repo
  */
 getGitHubPullRequestData = async (repoUrl) => {
   if (isNil(repoUrl)) {
@@ -34,13 +34,15 @@ getGitHubPullRequestData = async (repoUrl) => {
     const pullsUrl = `${GITHUB_REPO_API_URL}${pathName}/pulls`;
     const res = await fetch(pullsUrl, FETCH_OPTIONS);
     const pullRequestList = await res.json();
+
     // map through each PR and fetch commit count from each commit
     return await Promise.map(pullRequestList, async (pullRequest) => {
+      let commitsCount = 0;
       const commitsUrl = getCommitsUrl(pullRequest);
       if (commitsUrl) {
-        const commitsCount = await getCommitsCountFromUrl(commitsUrl);
+        commitsCount = await getCommitsCountFromUrl(commitsUrl);
         return {
-          // just a portion of the response or the whole response?
+          // just a portion of the PR data or the whole thing?
           ...pullRequest,
           commits_count: commitsCount,
         }
@@ -59,12 +61,17 @@ getGitHubPullRequestData = async (repoUrl) => {
  */
 getCommitsCountFromUrl = async (commitsUrl) => {
   if (isNil(commitsUrl)) {
-    return null;
+    return 0;
   }
 
   const res = await fetch(commitsUrl, FETCH_OPTIONS);
   const body = await res.json();
-  return size(body);
+
+  if (body instanceof Array) {
+    return size(body);
+  }
+
+  return 0;
 }
 
 /**

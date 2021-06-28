@@ -70,9 +70,9 @@ describe('service getCommitsCountFromUrl()', () => {
     jest.clearAllMocks();
   });
 
-  test('should return null when no url is passed in', async () => {
+  test('should return 0 when no url is passed in', async () => {
     const result = await service.getCommitsCountFromUrl();
-    expect(result).toBe(null);
+    expect(result).toBe(0);
   });
 
   test('should return the correct number of commits per commit url', async () => {
