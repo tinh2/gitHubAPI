@@ -4,7 +4,7 @@
   "description": "GitHub API integration",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.5"
   }
 }

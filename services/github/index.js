@@ -29,10 +29,12 @@ getGitHubPullRequestData = async (repoUrl) => {
     // map through each PR and fetch commit count from each commit
     return await Promise.map(pullRequestList, async (pullRequest) => {
       const commitsUrl = getCommitsUrl(pullRequest);
-      const commitsCount = await getCommitsCountFromUrl(commitsUrl);
-      return {
-        ...pullRequest,
-        commits_count: commitsCount,
+      if (commitsUrl) {
+        const commitsCount = await getCommitsCountFromUrl(commitsUrl);
+        return {
+          ...pullRequest,
+          commits_count: commitsCount,
+        }
       }
     })
   } catch (e) {
@@ -63,7 +65,11 @@ getCommitsCountFromUrl = async (commitsUrl) => {
  * @returns {String} The commits url
  */
 getCommitsUrl = (pullRequest = {}) => {
-  return get(pullRequest, 'commits_url');
+  return get(pullRequest, 'commits_url', undefined);
 }
 
-exports.getGitHubPullRequestData = getGitHubPullRequestData;
+module.exports = {
+  getGitHubPullRequestData,
+  getCommitsUrl,
+  getCommitsCountFromUrl
+}
