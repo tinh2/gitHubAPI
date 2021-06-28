@@ -24,9 +24,13 @@ getGitHubPullRequestData = async (repoUrl) => {
     return null;
   }
 
+  const fullUrl = new URL(repoUrl);
+  const pathName = fullUrl.pathname;
+  if (isNil(pathName) || pathName === '/') {
+    return null;
+  }
+
   try {
-    const fullUrl = new URL(repoUrl);
-    const pathName = fullUrl.pathname;
     const pullsUrl = `${GITHUB_REPO_API_URL}${pathName}/pulls`;
     const res = await fetch(pullsUrl, FETCH_OPTIONS);
     const pullRequestList = await res.json();

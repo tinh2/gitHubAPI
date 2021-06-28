@@ -13,6 +13,12 @@ describe('service getGitHubPullRequestData()', () => {
     expect(result).toBe(null);
   });
 
+  test('should return null when repo url has no path', async () => {
+    const url = 'https://www.github.com'
+    const result = await service.getGitHubPullRequestData(url);
+    expect(result).toBe(null);
+  });
+
   test('should return the correct pull request with commits count', async () => {
     const expected = [
       {
