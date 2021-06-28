@@ -12,7 +12,14 @@
   <title>GitHub API Integration</title>
 </head>
 <body>
-  <label for="repo-url">Please enter your GitHub Repo URL:</label>
-  <input type="text" id="repo-url" name="repo-url"/>
+  <!-- Make response prettier? Since this is a backend position,
+  I'm going to fulfill the requirements without the UI/UX in mind -->
+  <form action="http://localhost:8080/get-pulls" method="GET">
+    <label for="repo-url">Please enter your GitHub Repo URL:</label>
+    <div>
+      <input type="text" id="repo-url" name="url"/>
+      <button>Submit</button>
+    </div>
+  </form>
 </body>
 </html>

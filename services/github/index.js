@@ -9,7 +9,9 @@ const FETCH_OPTIONS = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }
-}
+};
+
+const GITHUB_REPO_API_URL = 'https://api.github.com/repos';
 
 /**
  * Retrieve list of pull requests for a given repository
@@ -23,7 +25,9 @@ getGitHubPullRequestData = async (repoUrl) => {
   }
 
   try {
-    const pullsUrl = `${repoUrl}/pulls`;
+    const fullUrl = new URL(repoUrl);
+    const pathName = fullUrl.pathname;
+    const pullsUrl = `${GITHUB_REPO_API_URL}${pathName}/pulls`;
     const res = await fetch(pullsUrl, FETCH_OPTIONS);
     const pullRequestList = await res.json();
     // map through each PR and fetch commit count from each commit
@@ -32,6 +36,7 @@ getGitHubPullRequestData = async (repoUrl) => {
       if (commitsUrl) {
         const commitsCount = await getCommitsCountFromUrl(commitsUrl);
         return {
+          // just a portion of the response or the whole response?
           ...pullRequest,
           commits_count: commitsCount,
         }
